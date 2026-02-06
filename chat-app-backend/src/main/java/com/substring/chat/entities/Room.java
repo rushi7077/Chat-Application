@@ -1,25 +1,27 @@
 package com.substring.chat.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "rooms")
+@Entity
+@Table(name = "rooms")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Room {
+
     @Id
-    private String id;//Mongo db : unique identifier
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;   // MySQL primary key
+
+    @Column(unique = true, nullable = false)
     private String roomId;
+
+    // One room → many messages
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();
-
-
 }
