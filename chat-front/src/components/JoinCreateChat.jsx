@@ -67,7 +67,7 @@ const JoinCreateChat = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await createRoomApi(detail.roomId);
+      const response = await createRoomApi({ roomId: detail.roomId });
       toast.success(`Room ${response.roomId} created!`, {
         icon: "🎉",
         style: {
