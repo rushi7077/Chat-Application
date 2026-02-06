@@ -1,24 +1,36 @@
 package com.substring.chat.entities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+import com.substring.chat.entities.Room;
+
+@Entity
+@Table(name = "messages")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Message {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String sender;
     private String content;
     private LocalDateTime timeStamp;
 
-    public Message(String content, String sender) {
-        this.content = content;
-        this.sender = sender;
-        this.timeStamp=LocalDateTime.now();
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
+
+    @PrePersist
+    protected void onCreate() {
+        this.timeStamp = LocalDateTime.now();
     }
 }
